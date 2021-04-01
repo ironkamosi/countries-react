@@ -1,9 +1,9 @@
 import React from "react";
-import { NavDropdown } from "react-bootstrap";
 
 const FilterMenu = (props) => {
  
   return (
+    
     <select
       id="basic-nav-dropdown"
       onChange={props.onChange}

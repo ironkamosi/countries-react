@@ -6,41 +6,45 @@ import SearchBar from "./SearchBar.jsx";
 import countriesAll from "./countriesAll.json";
 
 function App() {
-  const [searchInputText, setSearchInputText] = useState("");
+  const [searchInputText, setSearchInputText] = useState(""); 
   const [regionFilterText, setRegionFilterText] = useState("all regions");
 
-  function searchCountries(event) {
+  //this is an on keyUp event handler for the search input box  
+  function searchCountries(event) { 
     let searchString = event.target.value.toLowerCase();
     setSearchInputText(searchString);
-
-    // event handler responds to the key down/up event
   }
 
+//this is an on change event Handler for the region drop down menu
   function filterCountriesByRegion(event) {
     const regionName = event.target.value;
     setRegionFilterText(regionName);
-  } 
+  }
 
- let regionNames = [];
- countriesAll.forEach((countryData) => {
-   // this statement means if the region does not exist in the array then...
-   if (!regionNames.includes(countryData.region)) {
-     regionNames.push(countryData.region);
-   }
- });
-  
-  let foundCountryNames = [];
+  // this is an array to store region names
+  let regionNames = [];
+  countriesAll.forEach((countryData) => {
+    // this statement means if the region does not exist in the array then...
+    if (!regionNames.includes(countryData.region)) {
+      regionNames.push(countryData.region);
+    }
+  });
+
+  //this is an array to store found countryNames (data = entire data of countries)
+  //process starts at ln 34 - 51
+  let foundCountryNames = []; // (regionally) global variable that works with the search and the filter 
+
+  // this loop is for the search function for the search box
   countriesAll.forEach((countryName) => {
-    // this analyses the data in the array
     if (
       countryName.name.toLowerCase().includes(searchInputText) ||
       countryName.capital.toLowerCase().includes(searchInputText)
-      // countryName.region === regionFilterText
     )
       foundCountryNames.push(countryName);
   });
+
+// this filters on countries based on region name
   foundCountryNames = foundCountryNames.filter((country) => {
-    // const region = country.region;
     if (regionFilterText === "all regions") {
       return true;
     } else {
@@ -50,7 +54,11 @@ function App() {
 
   return (
     <div>
-      <SearchBar regions={regionNames} onKeyUp={searchCountries} onChange={filterCountriesByRegion} />
+      <SearchBar
+        regions={regionNames} // names of regions
+        onKeyUp={searchCountries} // filter 
+        onChange={filterCountriesByRegion} 
+      />
       <CountriesDisplayCards filteredCountriesData={foundCountryNames} />
     </div>
   );
